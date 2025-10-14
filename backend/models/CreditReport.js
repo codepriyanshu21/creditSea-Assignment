@@ -15,12 +15,11 @@ const creditReportSchema = new mongoose.Schema({
     last7DaysEnquiries: Number,
   },
   creditAccounts: [{
-    creditCard: String,
     bank: String,
-    address: String,
     accountNumber: String,
     amountOverdue: Number,
     currentBalance: Number,
+    address: String,
   }],
   uploadedAt: { type: Date, default: Date.now },
 });
