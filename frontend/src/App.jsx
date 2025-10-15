@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import UploadForm from './components/UploadForm';
 import ReportDisplay from './components/ReportDisplay';
-import { FaFileAlt, FaCreditCard, FaBuilding, FaCalendarAlt, FaEye, FaCloudUploadAlt } from 'react-icons/fa';
+import { FaFileAlt, FaCreditCard, FaBuilding, FaCalendarAlt, FaEye, FaCloudUploadAlt, FaSpinner } from 'react-icons/fa';
 
 const App = () => {
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchReports();
   }, []);
 
   const fetchReports = async () => {
+    setLoading(true);
     try {
       const API = import.meta.env.VITE_API_URL ?? 'http://localhost:5000';
       const response = await fetch(`${API}/api/reports`);
@@ -21,6 +23,8 @@ const App = () => {
       }
     } catch (error) {
       console.error('Error fetching reports:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,7 +59,13 @@ const App = () => {
             <p className="text-gray-600">Select a report to view detailed analysis</p>
           </div>
 
-          {reports.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300">
+              <FaSpinner className="mx-auto h-16 w-16 text-blue-500 animate-spin mb-4" />
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">Loading Reports</h3>
+              <p className="text-gray-500">Please wait while we fetch your credit reports...</p>
+            </div>
+          ) : reports.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {reports.map((report) => (
                 <div
