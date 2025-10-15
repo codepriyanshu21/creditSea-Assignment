@@ -13,7 +13,8 @@ const App = () => {
 
   const fetchReports = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/reports');
+      const API = import.meta.env.VITE_API_URL ?? 'http://localhost:5000';
+      const response = await fetch(`${API}/api/reports`);
       if (response.ok) {
         const data = await response.json();
         setReports(data);
@@ -26,7 +27,8 @@ const App = () => {
   const handleUploadSuccess = async (id) => {
     await fetchReports(); // Refresh the list
     // Find and select the newly uploaded report
-    const updatedReports = await fetch('http://localhost:5000/api/reports').then(res => res.json());
+    const API = import.meta.env.VITE_API_URL ?? 'http://localhost:5000';
+    const updatedReports = await fetch(`${API}/api/reports`).then(res => res.json());
     const newReport = updatedReports.find(r => r._id === id);
     if (newReport) {
       setSelectedReport(newReport);
